@@ -18,7 +18,6 @@ import {Entity, model, property} from '@loopback/repository';
     },
   },
 })
-
 export class CategoriaVehiculo extends Entity {
   @property({
     type: 'number',

@@ -13,7 +13,6 @@ import {Vehiculo} from './vehiculo.model';
     },
   },
 })
-
 export class Foto extends Entity {
   @property({
     type: 'number',

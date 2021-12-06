@@ -2,6 +2,7 @@ import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository'
 import {Marca} from './marca.model';
 import {Categoria} from './categoria.model';
 import {CategoriaVehiculo} from './categoria-vehiculo.model';
+import {Foto} from './foto.model';
 import {Proveedor} from './proveedor.model';
 
 @model({
@@ -22,7 +23,6 @@ import {Proveedor} from './proveedor.model';
     },
   },
 })
-
 export class Vehiculo extends Entity {
   @property({
     type: 'number',
@@ -77,7 +77,10 @@ export class Vehiculo extends Entity {
   id_marca: number;
 
   @hasMany(() => Categoria, {through: {model: () => CategoriaVehiculo, keyFrom: 'id_vehiculo', keyTo: 'id_categoria'}})
-  categorias: Categoria[];
+  tiene_categorias: Categoria[];
+
+  @hasMany(() => Foto, {keyTo: 'id_vehiculo'})
+  tiene_fotos: Foto[];
 
   @belongsTo(() => Proveedor, {name: 'tiene_proveedor'})
   id_proveedor: number;

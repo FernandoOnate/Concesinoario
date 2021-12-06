@@ -43,7 +43,7 @@ export class VehiculoCategoriaController {
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Categoria>,
   ): Promise<Categoria[]> {
-    return this.vehiculoRepository.categorias(id).find(filter);
+    return this.vehiculoRepository.tiene_categorias(id).find(filter);
   }
 
   @post('/vehiculos/{id}/categorias', {
@@ -67,7 +67,7 @@ export class VehiculoCategoriaController {
       },
     }) categoria: Omit<Categoria, 'id'>,
   ): Promise<Categoria> {
-    return this.vehiculoRepository.categorias(id).create(categoria);
+    return this.vehiculoRepository.tiene_categorias(id).create(categoria);
   }
 
   @patch('/vehiculos/{id}/categorias', {
@@ -90,7 +90,7 @@ export class VehiculoCategoriaController {
     categoria: Partial<Categoria>,
     @param.query.object('where', getWhereSchemaFor(Categoria)) where?: Where<Categoria>,
   ): Promise<Count> {
-    return this.vehiculoRepository.categorias(id).patch(categoria, where);
+    return this.vehiculoRepository.tiene_categorias(id).patch(categoria, where);
   }
 
   @del('/vehiculos/{id}/categorias', {
@@ -105,6 +105,6 @@ export class VehiculoCategoriaController {
     @param.path.number('id') id: number,
     @param.query.object('where', getWhereSchemaFor(Categoria)) where?: Where<Categoria>,
   ): Promise<Count> {
-    return this.vehiculoRepository.categorias(id).delete(where);
+    return this.vehiculoRepository.tiene_categorias(id).delete(where);
   }
 }
