@@ -33,6 +33,6 @@ export class UsuarioRolController {
   async getRol(
     @param.path.string('id') id: typeof Usuario.prototype._id,
   ): Promise<Rol> {
-    return this.usuarioRepository.tiene(id);
+    return this.usuarioRepository.tiene_rol(id);
   }
 }

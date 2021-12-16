@@ -1,30 +1,29 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Usuario} from '../models';
+import {Credenciales} from '../models/credenciales.model';
 import {UsuarioRepository} from '../repositories';
+import {AdministradorDeClavesService} from '../services';
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository : UsuarioRepository,
-  ) {}
+    public usuarioRepository: UsuarioRepository,
+    @service(AdministradorDeClavesService)
+    public servicioClave: AdministradorDeClavesService,
+  ) { }
 
   @post('/usuarios')
   @response(200, {
@@ -44,6 +43,10 @@ export class UsuarioController {
     })
     usuario: Omit<Usuario, '_id'>,
   ): Promise<Usuario> {
+    let clave = this.servicioClave.GenerarClaveAleatoria();
+    let claveC = this.servicioClave.CifrarC(clave);
+    usuario.clave = claveC;
+
     return this.usuarioRepository.create(usuario);
   }
 
@@ -147,4 +150,31 @@ export class UsuarioController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.usuarioRepository.deleteById(id);
   }
+
+  /**
+   * Seccion de seguridad
+   */
+  @post("/identificar-usuario", {
+    responses: {
+      '200': {
+        description: "Identificación de usuarios"
+      }
+    }
+  }) async identificar(
+    @requestBody() credenciales: Credenciales
+  ): Promise<Usuario | null> {
+    let usuario = await this.usuarioRepository.findOne({
+      where: {
+        correo: credenciales.usuario,
+        clave: credenciales.clave
+      }
+    });
+    if (usuario) {
+      //consumir el microservicio de tokens y generar uno nuevo
+      //se asignara ese token a la  respuesta del cliente
+    }
+    return usuario;
+  }
+
 }
+

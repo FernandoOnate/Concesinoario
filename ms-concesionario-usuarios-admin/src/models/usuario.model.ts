@@ -28,7 +28,13 @@ export class Usuario extends Entity {
   })
   celular: string;
 
-  @belongsTo(() => Rol, {name: 'tiene'})
+  @property({
+    type: 'string',
+    required: false,
+  })
+  clave: string;
+
+  @belongsTo(() => Rol, {name: 'tiene_rol'})
   id_rol: string;
 
   constructor(data?: Partial<Usuario>) {

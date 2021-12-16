@@ -10,13 +10,13 @@ export class UsuarioRepository extends DefaultCrudRepository<
   UsuarioRelations
 > {
 
-  public readonly tiene: BelongsToAccessor<Rol, typeof Usuario.prototype._id>;
+  public readonly tiene_rol: BelongsToAccessor<Rol, typeof Usuario.prototype._id>;
 
   constructor(
     @inject('datasources.mongodb') dataSource: MongodbDataSource, @repository.getter('RolRepository') protected rolRepositoryGetter: Getter<RolRepository>,
   ) {
     super(Usuario, dataSource);
-    this.tiene = this.createBelongsToAccessorFor('tiene', rolRepositoryGetter,);
-    this.registerInclusionResolver('tiene', this.tiene.inclusionResolver);
+    this.tiene_rol = this.createBelongsToAccessorFor('tiene_rol', rolRepositoryGetter,);
+    this.registerInclusionResolver('tiene_rol', this.tiene_rol.inclusionResolver);
   }
 }
